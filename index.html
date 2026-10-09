@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remote Drive — Akses file PC &amp; HP dari satu tempat</title>
+<meta name="description" content="Remote Drive: kelola file komputer Windows dan HP Android saling terhubung lewat browser. Cepat, terenkripsi HTTPS, tanpa ribet.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 108 108'%3E%3Crect width='108' height='108' rx='24' fill='%2312336E'/%3E%3Cpath d='M26 42 h22 l6 8 h28 v8 h-56 z' fill='%23fff'/%3E%3Cpath d='M26 54 h56 v24 h-56 z' fill='%23fff'/%3E%3Cpath d='M36 59 H70 M64 53 L71 59 L64 65' stroke='%231D5BD8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M72 71 H38 M44 65 L37 71 L44 77' stroke='%231D5BD8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#FAF9F6; --card:#FFFFFF; --ink:#1B2440; --muted:#5C6478;
+    --line:#E7E2D8; --primary:#12336E; --primary-2:#1D5BD8; --gold:#A67C2E;
+    --radius:14px; --shadow:0 6px 24px rgba(27,36,64,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif; font-weight:600; line-height:1.2; margin:0 0 .5em}
+  h1{font-size:clamp(34px,5vw,54px); letter-spacing:-.01em}
+  h2{font-size:clamp(26px,3.4vw,36px)}
+  h3{font-size:21px}
+  p{margin:.4em 0}
+  a{color:var(--primary)}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px}
+  .kicker{font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:14px}
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,249,246,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex; align-items:center; gap:16px; height:64px}
+  .nav .brand{display:flex; align-items:center; gap:10px; font-weight:650; text-decoration:none; color:var(--ink); font-family:Georgia,serif; font-size:19px}
+  .nav .brand svg{width:30px; height:30px}
+  .nav .links{margin-left:auto; display:flex; gap:22px}
+  .nav .links a{color:var(--muted); text-decoration:none; font-size:14.5px}
+  .nav .links a:hover{color:var(--primary)}
+
+  .hero{padding:88px 0 72px; text-align:center}
+  .hero .logo{width:76px; height:76px; margin-bottom:22px; filter:drop-shadow(0 8px 18px rgba(18,51,110,.25))}
+  .hero p.lead{font-size:19px; color:var(--muted); max-width:640px; margin:14px auto 34px}
+  .cta{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    display:inline-flex; align-items:center; gap:9px; padding:13px 26px;
+    border-radius:999px; text-decoration:none; font-weight:600; font-size:15.5px;
+    border:1px solid transparent; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
+  .btn-primary{background:var(--primary); color:#fff}
+  .btn-ghost{background:transparent; color:var(--primary); border-color:#C9CFDD}
+  .btn svg{width:18px; height:18px}
+  .cta .sub{width:100%; font-size:13px; color:var(--muted); margin-top:6px}
+
+  .rule{border:0; height:1px; background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent); margin:0}
+  section{padding:66px 0}
+  .sec-head{text-align:center; max-width:640px; margin:0 auto 44px}
+
+  .apps{display:grid; grid-template-columns:1fr 1fr; gap:26px}
+  .app-card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px 30px; box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .app-card::before{content:""; position:absolute; inset:0 0 auto 0; height:3px; background:linear-gradient(90deg,var(--primary),var(--primary-2))}
+  .app-card .head{display:flex; align-items:center; gap:14px; margin-bottom:8px}
+  .app-card .head svg{width:46px; height:46px}
+  .badge{
+    display:inline-block; font-size:12px; letter-spacing:.06em; color:var(--gold);
+    border:1px solid #E4D6B8; background:#FBF6EC; border-radius:999px; padding:3px 12px; margin:6px 0 14px;
+  }
+  .steps{list-style:none; margin:18px 0 0; padding:16px 0 0; border-top:1px dashed var(--line)}
+  .steps li{display:flex; gap:12px; margin:9px 0; font-size:15px}
+  .steps .n{
+    flex:0 0 24px; height:24px; border-radius:50%; background:var(--primary); color:#fff;
+    font-size:12.5px; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-top:2px;
+  }
+
+  .feats{display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+  .feat{
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 18px;
+    font-size:14.5px;
+  }
+  .feat svg{width:20px; height:20px; margin-bottom:9px; display:block}
+  .feat b{display:block; font-size:15px; margin-bottom:3px}
+
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:26px}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:28px 26px}
+  .panel ul{margin:10px 0 0; padding-left:20px}
+  .panel li{margin:7px 0; font-size:15px}
+
+  .note{
+    background:#FBF6EC; border:1px solid #E4D6B8; border-left:4px solid var(--gold);
+    border-radius:10px; padding:22px 26px; max-width:820px; margin:0 auto;
+  }
+  .note h3{color:#7A5C22; font-size:18px}
+  .note ul{margin:8px 0 0; padding-left:20px; font-size:15px}
+
+  .dls{display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:840px; margin:0 auto}
+  .dl{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px 28px; text-align:center; box-shadow:var(--shadow);
+  }
+  .dl svg.big{width:54px; height:54px}
+  .dl .size{font-size:13px; color:var(--muted); margin:6px 0 18px}
+  .dl .btn{width:100%; justify-content:center}
+
+  footer{border-top:1px solid var(--line); padding:34px 0 44px; color:var(--muted); font-size:14px}
+  footer .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+
+  @media (max-width:860px){
+    .apps,.two,.dls{grid-template-columns:1fr}
+    .feats{grid-template-columns:1fr 1fr}
+    .nav .links{display:none}
+    .hero{padding:64px 0 52px}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 108 108">
+    <rect width="108" height="108" rx="24" fill="#12336E"/>
+    <path d="M26 42 h22 l6 8 h28 v8 h-56 z" fill="#fff"/>
+    <path d="M26 54 h56 v24 h-56 z" fill="#fff"/>
+    <path d="M36 59 H70 M64 53 L71 59 L64 65" stroke="#1D5BD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M72 71 H38 M44 65 L37 71 L44 77" stroke="#1D5BD8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="11" fill="#EDF1F9"/>
+    <path d="M7 12.5 l3.4 3.4 L17 9" stroke="#12336E" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="ic-win" viewBox="0 0 24 24">
+    <path d="M3 5.6 l7.6-1 v6.9 H3z M11.8 4.4 L21 3v8.5h-9.2z M3 12.6 h7.6v6.9L3 18.4z M11.8 12.6 H21V21l-9.2-1.4z" fill="#12336E"/>
+  </symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24">
+    <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" fill="none" stroke="#12336E" stroke-width="2"/>
+    <circle cx="12" cy="18.4" r="1.1" fill="#12336E"/>
+  </symbol>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#"><svg><use href="#logo"/></svg>Remote Drive</a>
+    <nav class="links">
+      <a href="#aplikasi">Aplikasi</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#cara">Cara Pakai</a>
+      <a href="#unduh">Unduh</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <svg class="logo"><use href="#logo"/></svg>
+    <div class="kicker">Windows &nbsp;&middot;&nbsp; Android</div>
+    <h1>Kelola file PC dan HP<br>dari satu tempat</h1>
+    <p class="lead">Remote Drive membuat komputer Windows dan HP Android saling terhubung lewat browser — cepat, terenkripsi HTTPS, tanpa aplikasi khusus di sisi penerima.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDrive.exe">
+        <svg><use href="#ic-win"/></svg> Unduh untuk Windows
+      </a>
+      <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDriveHP.apk">
+        <svg><use href="#ic-phone"/></svg> Unduh APK Android
+      </a>
+      <span class="sub">Windows 10/11 64-bit &middot; Android 8+ &middot; tanpa instal Node.js</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section id="aplikasi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Dua Aplikasi</div>
+      <h2>Satu layanan, dua arah</h2>
+      <p class="muted">Server di PC mengakses isi komputer; server di HP mengakses isi HP. Keduanya terbuka dari browser yang sama.</p>
+    </div>
+    <div class="apps">
+      <div class="app-card">
+        <div class="head"><svg><use href="#logo"/></svg><h3>Remote Drive untuk Windows</h3></div>
+        <span class="badge">Windows 10/11 &middot; 64-bit &middot; 89 MB</span>
+        <p class="muted">Satu file <b>RemoteDrive.exe</b> sudah membawa semuanya — tanpa Node.js, tanpa instalasi, bisa langsung dijalankan dari folder mana pun.</p>
+        <ul class="muted" style="font-size:15px; padding-left:20px; margin-top:12px">
+          <li>Akses <b>semua drive</b> (C:, D:, …)</li>
+          <li>Galeri foto &amp; video, preview PDF/musik/video</li>
+          <li>Download file &amp; seluruh folder jadi ZIP</li>
+          <li>HTTPS + tombol Masuk tanpa password</li>
+        </ul>
+        <ol class="steps">
+          <li><span class="n">1</span><span>Unduh <b>RemoteDrive.exe</b></span></li>
+          <li><span class="n">2</span><span>Klik dua kali — SmartScreen pilih <b>More info &rarr; Run anyway</b></span></li>
+          <li><span class="n">3</span><span>Buka <b>https://localhost:8443</b> lalu tekan <b>Masuk</b></span></li>
+        </ol>
+      </div>
+      <div class="app-card">
+        <div class="head"><svg><use href="#logo"/></svg><h3>Remote Drive HP (APK)</h3></div>
+        <span class="badge">Android 8+ &middot; 46 KB &middot; server di HP</span>
+        <p class="muted">Server berjalan di latar HP (foreground service) sehingga <b>PC bisa membuka isi HP</b> kapan saja lewat browser.</p>
+        <ul class="muted" style="font-size:15px; padding-left:20px; margin-top:12px">
+          <li>Fitur persis sama dengan versi PC</li>
+          <li>Root: penyimpanan HP (foto, unduhan, dokumen)</li>
+          <li>Tahan mode hemat daya MIUI (server di foreground)</li>
+          <li>Layar HP harus menyala selama dipakai</li>
+        </ul>
+        <ol class="steps">
+          <li><span class="n">1</span><span>Unduh &amp; buka <b>RemoteDriveHP.apk</b></span></li>
+          <li><span class="n">2</span><span>Izinkan <b>akses ke semua file</b>, server otomatis menyala</span></li>
+          <li><span class="n">3</span><span>Dari PC buka <b>https://IP-HP:8443</b> lalu tekan <b>Masuk</b></span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section id="fitur">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Kemampuan</div>
+      <h2>Fitur lengkap, dua-duanya</h2>
+    </div>
+    <div class="feats">
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Semua drive</b><span class="muted">Jelajahi C:, D:, dan drive lain dari satu halaman</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Galeri media</b><span class="muted">Foto &amp; video tampil thumbnail, urut terbaru</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Preview langsung</b><span class="muted">PDF, gambar, video (bisa seek), musik</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Download ZIP</b><span class="muted">Satu folder utuh jadi arsip .zip</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Upload banyak</b><span class="muted">Pilih banyak file sekaligus</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Salin &amp; tempel</b><span class="muted">Rename, salin, tempel, hapus, buat folder</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>Edit teks</b><span class="muted">Ubah file teks langsung di browser</span></div>
+      <div class="feat"><svg><use href="#ic-check"/></svg><b>HTTPS</b><span class="muted">Koneksi terenkripsi, sesi 7 hari</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section id="cara">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Cara Pakai</div>
+      <h2>Tiga langkah, selesai</h2>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <h3>Akses PC dari HP</h3>
+        <ul>
+          <li>Jalankan <b>RemoteDrive.exe</b> di PC (window konsol = log server)</li>
+          <li>Pastikan HP dan PC satu jaringan Wi-Fi/hotspot</li>
+          <li>Di HP buka <b>https://IP-PC:8443</b> &rarr; peringatan sertifikat &rarr; <b>Lanjutkan</b> &rarr; <b>Masuk</b></li>
+          <li>Dari luar rumah: pakai <b>Tailscale</b> — jalankan <code>tailscale serve --bg https+insecure://localhost:8443</code> di PC</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Akses HP dari PC</h3>
+        <ul>
+          <li>Install <b>RemoteDriveHP.apk</b>, izinkan akses file, server menyala</li>
+          <li>Catat alamat di layar aplikasi, contoh <b>https://192.168.43.1:8443</b></li>
+          <li>Dari PC buka alamat itu di browser &rarr; <b>Masuk</b></li>
+          <li>Biarkan layar HP menyala selama sedang dipakai</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="note">
+      <h3>Catatan keamanan</h3>
+      <ul>
+        <li><b>Tanpa password</b> — siapa pun yang tahu alamatnya bisa menekan Masuk. Jangan sebar alamatnya; pakai jaringan pribadi atau Tailscale.</li>
+        <li><b>Peringatan sertifikat</b> ("tidak aman") itu normal — sertifikat dibuat sendiri (self-signed), koneksi tetap terenkripsi. Pilih <b>Lanjutkan</b>.</li>
+        <li><b>SmartScreen</b> muncul karena exe belum ditandatangani: pilih <b>More info &rarr; Run anyway</b>.</li>
+        <li>Versi Windows memakai <b>root semua drive</b> — seluruh isi PC terbuka di jaringan. Ubah di <code>config.json</code> bila ingin dibatasi folder tertentu.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section id="unduh">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">Unduh</div>
+      <h2>Ambil yang Anda butuh</h2>
+      <p class="muted">Keduanya berjalan mandiri — tanpa akun, tanpa iklan, tanpa internet pun tetap jalan di jaringan lokal.</p>
+    </div>
+    <div class="dls">
+      <div class="dl">
+        <svg class="big"><use href="#logo"/></svg>
+        <h3>RemoteDrive.exe</h3>
+        <div class="size">Windows 10/11 64-bit &middot; 89 MB &middot; tanpa Node.js</div>
+        <a class="btn btn-primary" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDrive.exe">
+          <svg><use href="#ic-win"/></svg> Unduh untuk Desktop
+        </a>
+      </div>
+      <div class="dl">
+        <svg class="big"><use href="#logo"/></svg>
+        <h3>RemoteDriveHP.apk</h3>
+        <div class="size">Android 8+ &middot; 46 KB &middot; server di HP</div>
+        <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDriveHP.apk">
+          <svg><use href="#ic-phone"/></svg> Unduh APK Android
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Remote Drive &middot; kelola file dua arah PC &harr; HP</span>
+    <span>Dibuat untuk Windows 10/11 &amp; Android 8+</span>
+  </div>
+</footer>
+
+</body>
+</html>

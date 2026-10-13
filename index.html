@@ -165,7 +165,7 @@
       <a class="btn btn-primary" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDrive.exe">
         <svg><use href="#ic-win"/></svg> Unduh untuk Windows
       </a>
-      <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDriveHP.apk">
+      <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.1/RemoteDriveHP.apk">
         <svg><use href="#ic-phone"/></svg> Unduh APK Android
       </a>
       <span class="sub">Windows 10/11 64-bit &middot; Android 8+ &middot; tanpa instal Node.js</span>
@@ -201,11 +201,12 @@
       </div>
       <div class="app-card">
         <div class="head"><svg><use href="#logo"/></svg><h3>Remote Drive HP (APK)</h3></div>
-        <span class="badge">Android 8+ &middot; 46 KB &middot; server di HP</span>
-        <p class="muted">Server berjalan di latar HP (foreground service) sehingga <b>PC bisa membuka isi HP</b> kapan saja lewat browser.</p>
+        <span class="badge">Android 8+ &middot; 77 KB &middot; server &amp; akses antar HP</span>
+        <p class="muted">Server berjalan di latar HP (foreground service) sehingga <b>PC bisa membuka isi HP</b> kapan saja lewat browser. Kini satu APK juga bisa <b>membuka HP lain</b>.</p>
         <ul class="muted" style="font-size:15px; padding-left:20px; margin-top:12px">
           <li>Fitur persis sama dengan versi PC</li>
           <li>Root: penyimpanan HP (foto, unduhan, dokumen)</li>
+          <li><b>Akses HP lain</b> dari HP: telusuri, unduh, unggah — deteksi otomatis di Wi-Fi yang sama, dikunci <b>kode akses 6 digit</b></li>
           <li>Tahan mode hemat daya MIUI (server di foreground)</li>
           <li>Layar HP harus menyala selama dipakai</li>
         </ul>
@@ -213,6 +214,7 @@
           <li><span class="n">1</span><span>Unduh &amp; buka <b>RemoteDriveHP.apk</b></span></li>
           <li><span class="n">2</span><span>Izinkan <b>akses ke semua file</b>, server otomatis menyala</span></li>
           <li><span class="n">3</span><span>Dari PC buka <b>https://IP-HP:8443</b> lalu tekan <b>Masuk</b></span></li>
+          <li><span class="n">4</span><span>HP ke HP: tekan <b>Akses HP lain</b> lalu cocokkan <b>kode akses</b> 6 digit</span></li>
         </ol>
       </div>
     </div>
@@ -277,6 +279,7 @@
       <h3>Catatan keamanan</h3>
       <ul>
         <li><b>Tanpa password</b> — siapa pun yang tahu alamatnya bisa menekan Masuk. Jangan sebar alamatnya; pakai jaringan pribadi atau Tailscale.</li>
+        <li><b>HP ke HP</b> — tersambung hanya bila kode akses 6 digit di kedua layar cocok. Bandingkan kodenya, jangan sambungkan bila berbeda.</li>
         <li><b>Peringatan sertifikat</b> ("tidak aman") itu normal — sertifikat dibuat sendiri (self-signed), koneksi tetap terenkripsi. Pilih <b>Lanjutkan</b>.</li>
         <li><b>SmartScreen</b> muncul karena exe belum ditandatangani: pilih <b>More info &rarr; Run anyway</b>.</li>
         <li>Versi Windows memakai <b>root semua drive</b> — seluruh isi PC terbuka di jaringan. Ubah di <code>config.json</code> bila ingin dibatasi folder tertentu.</li>
@@ -306,8 +309,8 @@
       <div class="dl">
         <svg class="big"><use href="#logo"/></svg>
         <h3>RemoteDriveHP.apk</h3>
-        <div class="size">Android 8+ &middot; 46 KB &middot; server di HP</div>
-        <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.0/RemoteDriveHP.apk">
+        <div class="size">Android 8+ &middot; 77 KB &middot; server &amp; akses antar HP</div>
+        <a class="btn btn-ghost" href="https://github.com/gurukayarayaid/remote-drive/releases/download/v1.1/RemoteDriveHP.apk">
           <svg><use href="#ic-phone"/></svg> Unduh APK Android
         </a>
       </div>
